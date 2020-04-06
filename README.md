@@ -3,9 +3,10 @@
 
 ApplicationListener,
 JPA,
+JPQL,
 Hibernate,
-MVC,
-Thymeleaf,
 H2 database,
 Advanced Mappings to the database,
-JPQL
+MVC,
+Thymeleaf
+
