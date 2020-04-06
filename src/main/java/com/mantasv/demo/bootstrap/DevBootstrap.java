@@ -10,6 +10,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -17,13 +19,14 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
     private BookRepository bookRepository;
     private PublisherRepository publisherRepository;
 
-    public DevBootstrap(AuthorRepository authorRepository, BookRepository bookRepository, PublisherRepository publisherRepository) {
+    public DevBootstrap(AuthorRepository authorRepository, BookRepository bookRepository,
+                        PublisherRepository publisherRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
         this.publisherRepository = publisherRepository;
     }
 
-    private void initData(){
+    private void initData() {
 
         Publisher p = new Publisher();
         p.setName("foo");
@@ -38,15 +41,44 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
         authorRepository.save(eric);
         bookRepository.save(ddd);
 
-
         //Rod
         Author rod = new Author("Rod", "Johnson");
-        Book noEJB = new Book("J2EE Development without EJB", "23444", p );
+        Book noEJB = new Book("J2EE Development without EJB", "23444", p);
         rod.getBooks().add(noEJB);
         noEJB.getAuthors().add(rod);
 
         authorRepository.save(rod);
         bookRepository.save(noEJB);
+
+        //testing @ManyToMany relationship
+        eric.getBooks().add(noEJB);
+        noEJB.getAuthors().add(eric);
+        //update database
+        authorRepository.save(eric);
+        bookRepository.save(noEJB);
+
+        //Playing with JPQL
+        List<Author> myList = authorRepository.findAllAuthorsJPQL();
+        display(myList);
+        List<Book> myList2 = bookRepository.findAllBooksJPQL();
+        display(myList2);
+        List<Publisher> myList3 = publisherRepository.findAllPublishersJPQL();
+        display(myList3);
+        myList = authorRepository.findEvansJPQL();
+        display(myList);
+        myList = authorRepository.findEvansAndRodJPQL();
+        display(myList);
+        myList2 = bookRepository.findBooksHavingTheLastDigitInIsbn4();
+        display(myList2);
+
+    }
+
+    private <T> void display(List<T> myList) {
+        System.out.println("-------------------------------");
+        for (T a : myList) {
+            System.out.println(a);
+        }
+        System.out.println("-------------------------------");
     }
 
     @Override
