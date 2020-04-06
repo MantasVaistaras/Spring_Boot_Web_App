@@ -1,4 +1,11 @@
 # Spring_Boot_Web_App
 
 
-JPA, Hibernate, MVC, Thymeleaf, Spring Framework Events, H2 database
+ApplicationListener
+JPA
+Hibernate
+MVC
+Thymeleaf
+H2 database
+Advanced Mappings to the database
+JPQL
